@@ -75,18 +75,33 @@ Default credentials (from seed):
 
 ## Deploy to Vercel
 
-1. Push your code to GitHub
-2. Import the project in [Vercel](https://vercel.com)
-3. Add environment variables from `.env.example`
-4. Set `AUTH_URL` to your production domain (e.g. `https://yourdomain.vercel.app`)
-5. Deploy — Vercel runs `prisma generate` automatically via `postinstall`
+1. Push your code to GitHub.
+2. Import the project in [Vercel](https://vercel.com).
+3. Set the build command to `npm run build` and use the default output directory.
+4. Add these environment variables in the Vercel dashboard:
+   - `DATABASE_URL` — Railway MySQL connection string
+   - `AUTH_SECRET` — random 32+ character secret
+   - `AUTH_URL` — `https://your-app.vercel.app`
+   - `NEXTAUTH_URL` — `https://your-app.vercel.app`
+   - `NEXT_PUBLIC_SITE_URL` — `https://your-app.vercel.app`
+   - `NEXT_PUBLIC_API_URL` — optional if you use an external API backend
+   - `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` — optional seed/admin defaults
+   - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — optional for uploads
+5. Deploy the project.
+
+> Vercel automatically runs `prisma generate` via `postinstall`.
+>
+> `vercel.json` is included in this repo for Next.js compatibility.
 
 ### MySQL on Railway
 
-1. Create a new project on Railway
-2. Add a **MySQL** service
-3. Copy the `DATABASE_URL` from Railway variables
-4. Paste it into Vercel environment variables
+1. Create a new project on Railway.
+2. Add a **MySQL** service.
+3. Copy the `DATABASE_URL` from Railway variables.
+4. Paste it into Vercel environment variables.
+
+> Railway `DATABASE_URL` must be in MySQL format:
+> `mysql://user:password@host:port/db`
 
 ## Project Structure
 
