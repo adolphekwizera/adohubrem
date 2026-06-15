@@ -15,6 +15,10 @@ function createPrisma() {
     password: decodeURIComponent(parsed.password),
     database: parsed.pathname.replace(/^\//, ""),
     connectionLimit: 5,
+    connectTimeout: 20000,
+    acquireTimeout: 20000,
+    socketTimeout: 20000,
+    ssl: false,
   });
 
   return new PrismaClient({ adapter });

@@ -99,9 +99,17 @@ Default credentials (from seed):
 2. Add a **MySQL** service.
 3. Copy the `DATABASE_URL` from Railway variables.
 4. Paste it into Vercel environment variables.
+5. Seed the database if it is empty.
 
 > Railway `DATABASE_URL` must be in MySQL format:
 > `mysql://user:password@host:port/db`
+
+If the site looks empty after connecting to Railway, your database is likely empty. Run the seed script locally or from your Railway environment:
+
+```bash
+npx prisma db push
+npx prisma db seed
+```
 
 ## Project Structure
 
