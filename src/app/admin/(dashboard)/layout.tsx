@@ -6,11 +6,16 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-zinc-50 dark:bg-zinc-900">
+    <div className="flex min-h-screen bg-zinc-900">
       <AdminSidebar />
-      <div className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto">
+        <div className="border-b border-zinc-800 bg-zinc-950/50 px-6 py-4 lg:px-8">
+          <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+            Portfolio Admin
+          </p>
+        </div>
         <div className="p-6 lg:p-8">{children}</div>
-      </div>
+      </main>
     </div>
   );
 }

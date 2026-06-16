@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import {
   FileText,
   FolderKanban,
@@ -22,17 +22,19 @@ const navItems = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="border-b border-zinc-200 p-6 dark:border-zinc-800">
-        <Link href="/admin" className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white">
+    <aside className="flex w-64 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950">
+      <div className="border-b border-zinc-800 p-6">
+        <Link href="/admin" className="flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-xs font-bold text-white shadow-md shadow-emerald-900/30">
             AK
           </span>
-          <span className="font-semibold text-zinc-900 dark:text-white">
-            Admin Panel
-          </span>
+          <div>
+            <span className="block font-semibold text-white">Admin Panel</span>
+            <span className="text-xs text-zinc-500">Content manager</span>
+          </div>
         </Link>
       </div>
 
@@ -48,10 +50,10 @@ export function AdminSidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
                 isActive
-                  ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400"
-                  : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20"
+                  : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
               )}
             >
               <item.icon size={18} />
@@ -61,18 +63,28 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      <div className="space-y-1 border-t border-zinc-200 p-4 dark:border-zinc-800">
+      <div className="space-y-1 border-t border-zinc-800 p-4">
+        {session?.user && (
+          <div className="mb-3 rounded-xl bg-zinc-900 px-3 py-2.5">
+            <p className="truncate text-sm font-medium text-zinc-200">
+              {session.user.name}
+            </p>
+            <p className="truncate text-xs text-zinc-500">
+              {session.user.email}
+            </p>
+          </div>
+        )}
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-200"
         >
           <ExternalLink size={18} />
           View Site
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-400 transition-colors hover:bg-red-950/40"
         >
           <LogOut size={18} />
           Sign Out
