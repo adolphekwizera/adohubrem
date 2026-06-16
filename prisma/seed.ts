@@ -1,27 +1,13 @@
 import { PrismaClient } from "../src/generated/prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import bcrypt from "bcryptjs";
 import "dotenv/config";
+import { createMariaDbAdapterFromUrl } from "../src/lib/create-mariadb-adapter";
 
 function createPrisma() {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL is required for seeding");
 
-  const parsed = new URL(url);
-  const adapter = new PrismaMariaDb({
-    host: parsed.hostname,
-    port: parsed.port ? Number(parsed.port) : 3306,
-    user: decodeURIComponent(parsed.username),
-    password: decodeURIComponent(parsed.password),
-    database: parsed.pathname.replace(/^\//, ""),
-    connectionLimit: 5,
-    connectTimeout: 20000,
-    acquireTimeout: 20000,
-    socketTimeout: 20000,
-    ssl: false,
-  });
-
-  return new PrismaClient({ adapter });
+  return new PrismaClient({ adapter: createMariaDbAdapterFromUrl(url) });
 }
 
 const prisma = createPrisma();

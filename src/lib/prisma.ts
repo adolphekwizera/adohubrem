@@ -1,27 +1,13 @@
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "@/generated/prisma/client";
+import { createMariaDbAdapterFromUrl } from "@/lib/create-mariadb-adapter";
 
 function createAdapter() {
   const url = process.env.DATABASE_URL;
-  if (!url || !(url.startsWith("mysql://") || url.startsWith("mariadb://"))) {
-    throw new Error(
-      "DATABASE_URL is required and must start with mysql:// or mariadb://"
-    );
+  if (!url) {
+    throw new Error("DATABASE_URL is required");
   }
 
-  const parsed = new URL(url);
-  return new PrismaMariaDb({
-    host: parsed.hostname,
-    port: parsed.port ? Number(parsed.port) : 3306,
-    user: decodeURIComponent(parsed.username),
-    password: decodeURIComponent(parsed.password),
-    database: parsed.pathname.replace(/^\//, ""),
-    connectionLimit: 5,
-    connectTimeout: 20000,
-    acquireTimeout: 20000,
-    socketTimeout: 20000,
-    ssl: false,
-  });
+  return createMariaDbAdapterFromUrl(url);
 }
 
 const globalForPrisma = globalThis as unknown as {
@@ -31,4 +17,4 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma =
   globalForPrisma.prisma ?? new PrismaClient({ adapter: createAdapter() });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+globalForPrisma.prisma = prisma;

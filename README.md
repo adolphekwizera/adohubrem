@@ -79,7 +79,7 @@ Default credentials (from seed):
 2. Import the project in [Vercel](https://vercel.com).
 3. Set the build command to `npm run build` and use the default output directory.
 4. Add these environment variables in the Vercel dashboard:
-   - `DATABASE_URL` — Railway MySQL connection string
+   - `DATABASE_URL` — Railway `MYSQL_PUBLIC_URL` (public proxy URL)
    - `AUTH_SECRET` — random 32+ character secret
    - `AUTH_URL` — `https://your-app.vercel.app`
    - `NEXTAUTH_URL` — `https://your-app.vercel.app`
@@ -89,20 +89,19 @@ Default credentials (from seed):
    - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — optional for uploads
 5. Deploy the project.
 
-> Vercel automatically runs `prisma generate` via `postinstall`.
->
-> `vercel.json` is included in this repo for Next.js compatibility.
+> `postinstall` and the build script both run `prisma generate` so the Prisma client is ready on Vercel.
 
 ### MySQL on Railway
 
 1. Create a new project on Railway.
 2. Add a **MySQL** service.
-3. Copy the `DATABASE_URL` from Railway variables.
-4. Paste it into Vercel environment variables.
+3. Copy **`MYSQL_PUBLIC_URL`** from Railway variables (not `MYSQL_URL`).
+   - `MYSQL_URL` uses `mysql.railway.internal` and only works inside Railway.
+   - `MYSQL_PUBLIC_URL` uses `*.proxy.rlwy.net` and works from Vercel.
+4. In Vercel, set `DATABASE_URL` to that public URL.
 5. Seed the database if it is empty.
 
-> Railway `DATABASE_URL` must be in MySQL format:
-> `mysql://user:password@host:port/db`
+> Format: `mysql://user:password@host:port/railway`
 
 If the site looks empty after connecting to Railway, your database is likely empty. Run the seed script locally or from your Railway environment:
 
