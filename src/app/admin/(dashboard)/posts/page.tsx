@@ -25,10 +25,10 @@ export default async function AdminPostsPage() {
     <div>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-white">
             Blog Posts
           </h1>
-          <p className="text-zinc-500">Create and manage your blog content</p>
+          <p className="text-zinc-400">Create and manage your blog content</p>
         </div>
         <Button href="/admin/posts/new">
           <Plus size={18} />
@@ -50,7 +50,7 @@ export default async function AdminPostsPage() {
             <Card key={post.id} className="flex items-center justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="truncate font-semibold text-zinc-900 dark:text-white">
+                  <h3 className="truncate font-semibold text-white">
                     {post.title}
                   </h3>
                   {!post.published && <Badge>Draft</Badge>}
@@ -64,13 +64,13 @@ export default async function AdminPostsPage() {
                 <Link
                   href={`/blog/${post.slug}`}
                   target="_blank"
-                  className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-white/5 hover:text-emerald-400"
                 >
                   <Eye size={18} />
                 </Link>
                 <Link
                   href={`/admin/posts/${post.id}/edit`}
-                  className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-white/5 hover:text-emerald-400"
                 >
                   <Pencil size={18} />
                 </Link>

@@ -10,10 +10,8 @@ interface ServiceCardProps {
 export function ServiceCard({ title, description, message }: ServiceCardProps) {
   return (
     <Card hover className="flex h-full flex-col">
-      <h3 className="mb-3 text-lg font-semibold text-zinc-900 dark:text-white">
-        {title}
-      </h3>
-      <p className="mb-6 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+      <h3 className="mb-3 text-lg font-semibold text-white">{title}</h3>
+      <p className="mb-6 flex-1 text-sm leading-relaxed text-zinc-400">
         {description}
       </p>
       <WhatsAppButton

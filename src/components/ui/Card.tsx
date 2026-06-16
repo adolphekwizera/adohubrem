@@ -1,23 +1,41 @@
+"use client";
+
 import { type ReactNode } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { springSoft } from "@/lib/motion";
 
 interface CardProps {
   children: ReactNode;
   className?: string;
   hover?: boolean;
+  glass?: boolean;
 }
 
-export function Card({ children, className, hover = false }: CardProps) {
+export function Card({
+  children,
+  className,
+  hover = false,
+  glass = true,
+}: CardProps) {
   return (
-    <div
+    <motion.div
+      initial={false}
+      whileHover={
+        hover
+          ? { y: -5, scale: 1.015, transition: springSoft }
+          : undefined
+      }
       className={cn(
-        "rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50",
-        hover &&
-          "transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/10",
+        "rounded-2xl p-6",
+        glass
+          ? "glass-panel"
+          : "border border-white/6 bg-zinc-900/50 shadow-lg shadow-black/20",
+        hover && "gradient-border-hover cursor-pointer",
         className
       )}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }

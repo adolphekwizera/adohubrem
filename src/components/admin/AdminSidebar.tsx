@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { motion } from "framer-motion";
 import {
   FileText,
   FolderKanban,
@@ -12,6 +13,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { springSoft } from "@/lib/motion";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -25,10 +27,10 @@ export function AdminSidebar() {
   const { data: session } = useSession();
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950">
-      <div className="border-b border-zinc-800 p-6">
+    <aside className="relative z-10 flex w-64 shrink-0 flex-col border-r border-white/5 glass">
+      <div className="border-b border-white/5 p-5">
         <Link href="/admin" className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-xs font-bold text-white shadow-md shadow-emerald-900/30">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 text-xs font-bold text-white shadow-lg shadow-emerald-900/30">
             AK
           </span>
           <div>
@@ -38,7 +40,7 @@ export function AdminSidebar() {
         </Link>
       </div>
 
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className="flex-1 space-y-1 p-3">
         {navItems.map((item) => {
           const isActive =
             item.href === "/admin"
@@ -50,22 +52,27 @@ export function AdminSidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
-                isActive
-                  ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20"
-                  : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
+                "relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-300",
+                isActive ? "text-emerald-300" : "text-zinc-400 hover:text-zinc-200"
               )}
             >
-              <item.icon size={18} />
-              {item.label}
+              {isActive && (
+                <motion.span
+                  layoutId="admin-nav-active"
+                  className="absolute inset-0 rounded-xl bg-emerald-500/10 shadow-[0_0_16px_rgba(16,185,129,0.15)] ring-1 ring-emerald-500/25"
+                  transition={springSoft}
+                />
+              )}
+              <item.icon size={18} className="relative" strokeWidth={1.75} />
+              <span className="relative">{item.label}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="space-y-1 border-t border-zinc-800 p-4">
+      <div className="space-y-1 border-t border-white/5 p-3">
         {session?.user && (
-          <div className="mb-3 rounded-xl bg-zinc-900 px-3 py-2.5">
+          <div className="mb-2 rounded-xl bg-white/5 px-3 py-2.5 ring-1 ring-white/5">
             <p className="truncate text-sm font-medium text-zinc-200">
               {session.user.name}
             </p>
@@ -77,16 +84,16 @@ export function AdminSidebar() {
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-200"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200"
         >
-          <ExternalLink size={18} />
+          <ExternalLink size={18} strokeWidth={1.75} />
           View Site
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-400 transition-colors hover:bg-red-950/40"
+          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-400 transition-colors hover:bg-red-950/30"
         >
-          <LogOut size={18} />
+          <LogOut size={18} strokeWidth={1.75} />
           Sign Out
         </button>
       </div>

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { fadeUp, defaultViewport, springSoft } from "@/lib/motion";
 
 interface SectionHeaderProps {
   eyebrow?: string;
@@ -20,26 +21,33 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={defaultViewport}
+      transition={springSoft}
       className={cn(
         "mb-12",
-        align === "center" && "text-center mx-auto max-w-2xl",
+        align === "center" && "mx-auto max-w-2xl text-center",
         className
       )}
     >
       {eyebrow && (
-        <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={defaultViewport}
+          transition={{ ...springSoft, delay: 0.05 }}
+          className="mb-3 inline-block rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-400 ring-1 ring-emerald-500/20"
+        >
           {eyebrow}
-        </p>
+        </motion.p>
       )}
-      <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
+      <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
         {title}
       </h2>
       {description && (
-        <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
+        <p className="mt-4 text-lg leading-relaxed text-zinc-400">
           {description}
         </p>
       )}

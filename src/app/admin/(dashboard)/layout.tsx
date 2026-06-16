@@ -1,4 +1,5 @@
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AmbientBackground } from "@/components/ui/AmbientBackground";
 
 export default function AdminLayout({
   children,
@@ -6,15 +7,19 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-zinc-900">
+    <div className="relative flex min-h-screen bg-[#0a0f1a]">
+      <AmbientBackground variant="admin" />
       <AdminSidebar />
-      <main className="flex-1 overflow-auto">
-        <div className="border-b border-zinc-800 bg-zinc-950/50 px-6 py-4 lg:px-8">
+      <main className="relative flex-1 overflow-auto">
+        <div className="glass border-b border-white/5 px-6 py-3.5 lg:px-8">
           <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
             Portfolio Admin
           </p>
         </div>
-        <div className="p-6 lg:p-8">{children}</div>
+        <div className="workspace-glow relative p-6 lg:p-8">
+          <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.02]" />
+          {children}
+        </div>
       </main>
     </div>
   );

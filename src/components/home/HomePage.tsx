@@ -12,6 +12,7 @@ import { AboutSection } from "@/components/sections/AboutSection";
 import { FeaturedPostSection } from "@/components/sections/FeaturedPostSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { SERVICES } from "@/lib/services-data";
+import { fadeUp, staggerContainer, defaultViewport, springSoft } from "@/lib/motion";
 import type { BlogPost, Project } from "@/generated/prisma/client";
 
 interface HomePageProps {
@@ -21,6 +22,26 @@ interface HomePageProps {
 }
 
 const previewServices = SERVICES.flatMap((g) => [...g.items]).slice(0, 3);
+
+function AnimatedGrid({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={defaultViewport}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export function HomePage({
   featuredProjects,
@@ -42,19 +63,13 @@ export function HomePage({
               title="Latest Posts"
               description="Tutorials, freelancing tips, and lessons from my tech journey."
             />
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {latestPosts.map((post, i) => (
-                <motion.div
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                >
+            <AnimatedGrid className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {latestPosts.map((post) => (
+                <motion.div key={post.id} variants={fadeUp} transition={springSoft}>
                   <BlogCard post={post} />
                 </motion.div>
               ))}
-            </div>
+            </AnimatedGrid>
             <div className="mt-10 text-center">
               <Button href="/blog" variant="outline">
                 Read All Posts
@@ -65,26 +80,20 @@ export function HomePage({
       )}
 
       {featuredProjects.length > 0 && (
-        <section className="border-y border-zinc-200 bg-zinc-50 py-20 dark:border-zinc-800 dark:bg-zinc-900/30">
+        <section className="border-y border-white/5 py-20">
           <Container>
             <SectionHeader
               eyebrow="Portfolio"
               title="Featured Projects"
               description="Real projects I've built — from web applications to design work."
             />
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {featuredProjects.map((project, i) => (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                >
+            <AnimatedGrid className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredProjects.map((project) => (
+                <motion.div key={project.id} variants={fadeUp} transition={springSoft}>
                   <ProjectCard project={project} />
                 </motion.div>
               ))}
-            </div>
+            </AnimatedGrid>
             <div className="mt-10 text-center">
               <Button href="/projects" variant="outline">
                 View All Projects
@@ -102,19 +111,13 @@ export function HomePage({
             description="Professional services for individuals and businesses."
             align="center"
           />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {previewServices.map((service, i) => (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
+          <AnimatedGrid className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {previewServices.map((service) => (
+              <motion.div key={service.title} variants={fadeUp} transition={springSoft}>
                 <ServiceCard {...service} />
               </motion.div>
             ))}
-          </div>
+          </AnimatedGrid>
           <div className="mt-10 text-center">
             <Button href="/services">View All Services</Button>
           </div>

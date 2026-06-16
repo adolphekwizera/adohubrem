@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate, IMAGES } from "@/lib/constants";
+import { fadeUp, defaultViewport, springSoft } from "@/lib/motion";
 import type { BlogPost } from "@/generated/prisma/client";
 
 interface FeaturedPostSectionProps {
@@ -18,7 +19,7 @@ export function FeaturedPostSection({ post }: FeaturedPostSectionProps) {
   const imageSrc = post.image ?? IMAGES.featuredBg;
 
   return (
-    <section className="border-y border-zinc-200 bg-zinc-50 py-20 dark:border-zinc-800 dark:bg-zinc-900/30">
+    <section className="border-y border-white/5 py-20">
       <Container>
         <SectionHeader
           eyebrow="Featured"
@@ -26,24 +27,25 @@ export function FeaturedPostSection({ post }: FeaturedPostSectionProps) {
           description="A deep dive worth your time."
         />
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={defaultViewport}
+          transition={springSoft}
         >
           <Link
             href={`/blog/${post.slug}`}
-            className="group relative block overflow-hidden rounded-3xl shadow-lg transition-shadow duration-300 hover:shadow-2xl hover:shadow-emerald-500/10"
+            className="group gradient-border-hover relative block overflow-hidden rounded-3xl shadow-2xl shadow-black/30"
           >
-            <div className="relative aspect-[21/9] min-h-[280px] sm:min-h-[320px]">
+            <div className="glass-panel relative aspect-[21/9] min-h-[280px] overflow-hidden p-0 sm:min-h-[320px]">
               <Image
                 src={imageSrc}
                 alt={post.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 1152px"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/90 via-zinc-900/50 to-zinc-900/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/95 via-zinc-950/50 to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10">
                 <Badge variant="cyan" className="mb-4 w-fit">
                   {post.category}

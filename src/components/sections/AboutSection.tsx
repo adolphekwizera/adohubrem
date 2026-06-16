@@ -1,13 +1,13 @@
 "use client";
 
-// Use native <img> for the about image to avoid Next.js image optimizer on HEIC
-// files which some environments can't process.
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
+import { GlassPanel } from "@/components/ui/GlassPanel";
 import { IMAGES, SITE } from "@/lib/constants";
+import { slideInLeft, slideInRight, defaultViewport, springSoft } from "@/lib/motion";
 
 export function AboutSection() {
   return (
@@ -15,28 +15,30 @@ export function AboutSection() {
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            variants={slideInLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={defaultViewport}
+            transition={springSoft}
             className="relative order-2 lg:order-1"
           >
-            <div className="absolute -inset-3 rounded-2xl bg-emerald-500/10 blur-xl" />
-            <div className="relative aspect-square max-w-lg overflow-hidden rounded-2xl shadow-xl ring-1 ring-zinc-200/50 dark:ring-zinc-700/50">
+            <div className="absolute -inset-4 rounded-3xl bg-emerald-500/15 blur-2xl" />
+            <GlassPanel className="relative aspect-square max-w-lg overflow-hidden p-0">
               <img
                 src={IMAGES.about}
                 alt={`About ${SITE.name}`}
-                className="object-cover h-full w-full"
+                className="h-full w-full object-cover"
                 loading="lazy"
               />
-            </div>
+            </GlassPanel>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            variants={slideInRight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={defaultViewport}
+            transition={springSoft}
             className="order-1 lg:order-2"
           >
             <SectionHeader
@@ -44,7 +46,7 @@ export function AboutSection() {
               title="Developer, Designer, Problem Solver"
               description="A Computer Science student turning real-world challenges into digital solutions."
             />
-            <div className="space-y-4 text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <div className="space-y-4 leading-relaxed text-zinc-400">
               <p>
                 I&apos;m Ado — a full-stack developer and freelancer based in
                 Rwanda. What started as fixing friends&apos; laptops and designing

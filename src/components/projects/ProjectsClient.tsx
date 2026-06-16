@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { FilterChip } from "@/components/ui/FilterChip";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { PROJECT_CATEGORIES } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { fadeUp, staggerContainer, defaultViewport, springSoft } from "@/lib/motion";
 import type { Project } from "@/generated/prisma/client";
 
 interface ProjectsClientProps {
@@ -15,10 +17,13 @@ interface ProjectsClientProps {
 export function ProjectsClient({ projects }: ProjectsClientProps) {
   const [filter, setFilter] = useState("all");
 
-  const filtered =
-    filter === "all"
-      ? projects
-      : projects.filter((p) => p.category === filter);
+  const filtered = useMemo(
+    () =>
+      filter === "all"
+        ? projects
+        : projects.filter((p) => p.category === filter),
+    [projects, filter]
+  );
 
   return (
     <Container className="py-16 sm:py-20">
@@ -29,31 +34,18 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
         align="center"
       />
 
-      <div className="mb-10 flex flex-wrap justify-center gap-2">
-        <button
-          onClick={() => setFilter("all")}
-          className={cn(
-            "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-            filter === "all"
-              ? "bg-emerald-600 text-white"
-              : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-          )}
-        >
+      <div className="mb-10 flex flex-wrap justify-center gap-1 rounded-xl bg-white/5 p-1 ring-1 ring-white/5">
+        <FilterChip active={filter === "all"} onClick={() => setFilter("all")}>
           All
-        </button>
+        </FilterChip>
         {PROJECT_CATEGORIES.map((cat) => (
-          <button
+          <FilterChip
             key={cat.value}
+            active={filter === cat.value}
             onClick={() => setFilter(cat.value)}
-            className={cn(
-              "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-              filter === cat.value
-                ? "bg-emerald-600 text-white"
-                : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-            )}
           >
             {cat.label}
-          </button>
+          </FilterChip>
         ))}
       </div>
 
@@ -62,11 +54,19 @@ export function ProjectsClient({ projects }: ProjectsClientProps) {
           No projects found in this category yet.
         </p>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+          viewport={defaultViewport}
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {filtered.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <motion.div key={project.id} variants={fadeUp} transition={springSoft}>
+              <ProjectCard project={project} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </Container>
   );

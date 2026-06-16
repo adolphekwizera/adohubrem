@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { Loader2, Save, Trash2, Upload } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
+import { Select } from "@/components/ui/Select";
+import { Toggle } from "@/components/ui/Toggle";
 import { Button } from "@/components/ui/Button";
+import { GlassPanel } from "@/components/ui/GlassPanel";
 import { BLOG_CATEGORIES } from "@/lib/constants";
 import type { BlogPost } from "@/generated/prisma/client";
 
@@ -99,130 +102,117 @@ export function PostForm({ post }: PostFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
-      <Input
-        label="Title"
-        value={form.title}
-        onChange={(e) => setForm({ ...form, title: e.target.value })}
-        required
-      />
-      <Input
-        label="Slug (optional)"
-        value={form.slug}
-        onChange={(e) => setForm({ ...form, slug: e.target.value })}
-        placeholder="auto-generated-from-title"
-      />
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Category
-        </label>
-        <select
+    <GlassPanel glow className="max-w-3xl p-6 sm:p-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Input
+          label="Title"
+          value={form.title}
+          onChange={(e) => setForm({ ...form, title: e.target.value })}
+          required
+        />
+        <Input
+          label="Slug (optional)"
+          value={form.slug}
+          onChange={(e) => setForm({ ...form, slug: e.target.value })}
+          placeholder="auto-generated-from-title"
+        />
+        <Select
+          label="Category"
           value={form.category}
           onChange={(e) => setForm({ ...form, category: e.target.value })}
-          className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm dark:border-zinc-700 dark:bg-zinc-900"
         >
           {BLOG_CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
           ))}
-        </select>
-      </div>
-      <Input
-        label="Tags (comma separated)"
-        value={form.tags}
-        onChange={(e) => setForm({ ...form, tags: e.target.value })}
-        placeholder="nextjs, tutorial, react"
-      />
-      <Textarea
-        label="Excerpt"
-        value={form.excerpt}
-        onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-        rows={2}
-        required
-      />
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Content (Markdown)
-        </label>
-        <textarea
+        </Select>
+        <Input
+          label="Tags (comma separated)"
+          value={form.tags}
+          onChange={(e) => setForm({ ...form, tags: e.target.value })}
+          placeholder="nextjs, tutorial, react"
+        />
+        <Textarea
+          label="Excerpt"
+          value={form.excerpt}
+          onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
+          rows={2}
+          required
+        />
+        <Textarea
+          label="Content (Markdown)"
+          editor
           value={form.content}
           onChange={(e) => setForm({ ...form, content: e.target.value })}
           rows={16}
           required
-          className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
           placeholder="## Your heading&#10;&#10;Write your post in **markdown**..."
         />
-      </div>
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Cover Image
-        </label>
-        <div className="flex items-center gap-4">
-          <Input
-            value={form.image}
-            onChange={(e) => setForm({ ...form, image: e.target.value })}
-            placeholder="Image URL or upload"
-          />
-          <label className="cursor-pointer">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
-            <span className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 px-4 py-2.5 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800">
-              {uploading ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Upload size={16} />
-              )}
-              Upload
-            </span>
+        <div>
+          <label className="mb-2 block text-sm font-medium text-zinc-300">
+            Cover Image
           </label>
+          <div className="flex items-center gap-3">
+            <Input
+              value={form.image}
+              onChange={(e) => setForm({ ...form, image: e.target.value })}
+              placeholder="Image URL or upload"
+            />
+            <label className="cursor-pointer shrink-0">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-zinc-300 transition-all hover:bg-white/10 hover:shadow-[0_0_16px_rgba(16,185,129,0.1)]">
+                {uploading ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Upload size={16} />
+                )}
+                Upload
+              </span>
+            </label>
+          </div>
         </div>
-      </div>
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={form.featured}
-          onChange={(e) => setForm({ ...form, featured: e.target.checked })}
-          className="rounded"
-        />
-        Featured on homepage
-      </label>
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={form.published}
-          onChange={(e) => setForm({ ...form, published: e.target.checked })}
-          className="rounded"
-        />
-        Published
-      </label>
+        <div className="flex flex-wrap gap-6">
+          <Toggle
+            label="Featured on homepage"
+            checked={form.featured}
+            onChange={(featured) => setForm({ ...form, featured })}
+          />
+          <Toggle
+            label="Published"
+            checked={form.published}
+            onChange={(published) => setForm({ ...form, published })}
+          />
+        </div>
 
-      {error && (
-        <p className="rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20">
-          {error}
-        </p>
-      )}
-
-      <div className="flex gap-3">
-        <Button type="submit" disabled={loading}>
-          {loading ? (
-            <Loader2 size={18} className="animate-spin" />
-          ) : (
-            <Save size={18} />
-          )}
-          {post ? "Update Post" : "Create Post"}
-        </Button>
-        {post && (
-          <Button type="button" variant="outline" onClick={handleDelete}>
-            <Trash2 size={18} />
-            Delete
-          </Button>
+        {error && (
+          <p className="rounded-xl border border-red-900/50 bg-red-950/40 p-3 text-sm text-red-400">
+            {error}
+          </p>
         )}
-      </div>
-    </form>
+
+        <div className="flex gap-3 pt-2">
+          <Button type="submit" disabled={loading}>
+            {loading ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : (
+              <Save size={18} />
+            )}
+            {post ? "Update Post" : "Create Post"}
+          </Button>
+          {post && (
+            <Button type="button" variant="outline" onClick={handleDelete}>
+              <Trash2 size={18} />
+              Delete
+            </Button>
+          )}
+        </div>
+      </form>
+    </GlassPanel>
   );
 }

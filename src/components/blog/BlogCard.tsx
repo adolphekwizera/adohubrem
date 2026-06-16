@@ -18,7 +18,7 @@ export function BlogCard({ post }: BlogCardProps) {
 
   return (
     <Card hover className="group flex h-full flex-col overflow-hidden p-0">
-      <div className="relative aspect-[16/9] bg-zinc-100 dark:bg-zinc-800">
+      <div className="relative aspect-[16/9] bg-zinc-900/50">
         <Image
           src={imgSrc}
           alt={post.title}
@@ -36,15 +36,15 @@ export function BlogCard({ post }: BlogCardProps) {
             {post.views}
           </span>
         </div>
-        <h3 className="mb-2 text-lg font-semibold text-zinc-900 dark:text-white">
+        <h3 className="mb-2 text-lg font-semibold text-white">
           <Link
             href={`/blog/${post.slug}`}
-            className="hover:text-emerald-600 dark:hover:text-emerald-400"
+            className="transition-colors hover:text-emerald-400"
           >
             {post.title}
           </Link>
         </h3>
-        <p className="mb-4 flex-1 text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">
+        <p className="mb-4 flex-1 text-sm text-zinc-400 line-clamp-2">
           {post.excerpt}
         </p>
         <div className="flex items-center justify-between">
@@ -53,7 +53,7 @@ export function BlogCard({ post }: BlogCardProps) {
           </span>
           <Link
             href={`/blog/${post.slug}`}
-            className="inline-flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400"
+            className="inline-flex items-center gap-1 text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300"
           >
             Read <ArrowRight size={14} />
           </Link>
