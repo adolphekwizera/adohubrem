@@ -10,6 +10,7 @@ import { Toggle } from "@/components/ui/Toggle";
 import { Button } from "@/components/ui/Button";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { BLOG_CATEGORIES } from "@/lib/constants";
+import { MAX_UPLOAD_BYTES, formatUploadSize } from "@/lib/upload";
 import type { BlogPost } from "@/generated/prisma/client";
 
 interface PostFormProps {
@@ -38,7 +39,16 @@ export function PostForm({ post }: PostFormProps) {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setError(
+        `Image is too large (max ${formatUploadSize(MAX_UPLOAD_BYTES)}). Try a smaller photo or paste an image URL.`
+      );
+      e.target.value = "";
+      return;
+    }
+
     setUploading(true);
+    setError("");
     const formData = new FormData();
     formData.append("file", file);
 
@@ -153,13 +163,13 @@ export function PostForm({ post }: PostFormProps) {
           <label className="mb-2 block text-sm font-medium text-zinc-300">
             Cover Image
           </label>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <Input
               value={form.image}
               onChange={(e) => setForm({ ...form, image: e.target.value })}
               placeholder="Image URL or upload"
             />
-            <label className="cursor-pointer shrink-0">
+            <label className="cursor-pointer shrink-0 self-start sm:self-auto">
               <input
                 type="file"
                 accept="image/*"
@@ -196,8 +206,8 @@ export function PostForm({ post }: PostFormProps) {
           </p>
         )}
 
-        <div className="flex gap-3 pt-2">
-          <Button type="submit" disabled={loading}>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3 pt-2">
+          <Button type="submit" disabled={loading} className="w-full sm:w-auto">
             {loading ? (
               <Loader2 size={18} className="animate-spin" />
             ) : (

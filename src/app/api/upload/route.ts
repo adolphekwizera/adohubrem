@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { v2 as cloudinary } from "cloudinary";
+import { MAX_UPLOAD_BYTES, formatUploadSize } from "@/lib/upload";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -20,7 +21,10 @@ export async function POST(request: NextRequest) {
     !process.env.CLOUDINARY_API_SECRET
   ) {
     return NextResponse.json(
-      { error: "Cloudinary is not configured. Add credentials to .env" },
+      {
+        error:
+          "Cloudinary is not configured. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to your .env file (and Vercel env vars for production).",
+      },
       { status: 503 }
     );
   }
@@ -33,6 +37,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    if (file.size > MAX_UPLOAD_BYTES) {
+      return NextResponse.json(
+        {
+          error: `File too large. Maximum size is ${formatUploadSize(MAX_UPLOAD_BYTES)}.`,
+        },
+        { status: 413 }
+      );
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const base64 = buffer.toString("base64");
@@ -43,7 +56,10 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ url: result.secure_url });
-  } catch {
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+  } catch (err) {
+    console.error("Cloudinary upload error:", err);
+    const message =
+      err instanceof Error ? err.message : "Upload failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

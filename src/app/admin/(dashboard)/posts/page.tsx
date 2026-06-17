@@ -23,7 +23,7 @@ export default async function AdminPostsPage() {
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">
             Blog Posts
@@ -47,7 +47,7 @@ export default async function AdminPostsPage() {
       ) : (
         <div className="space-y-3">
           {posts.map((post) => (
-            <Card key={post.id} className="flex items-center justify-between gap-4">
+            <Card key={post.id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="truncate font-semibold text-white">

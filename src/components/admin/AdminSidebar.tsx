@@ -22,12 +22,25 @@ const navItems = [
   { href: "/admin/messages", label: "Messages", icon: Mail },
 ];
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}
+
+export function AdminSidebar({
+  mobileOpen = false,
+  onMobileClose,
+}: AdminSidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
 
   return (
-    <aside className="relative z-10 flex w-64 shrink-0 flex-col border-r border-white/5 glass">
+    <aside
+      className={cn(
+        "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/5 glass transition-transform duration-300 ease-out lg:relative lg:z-10 lg:shrink-0 lg:translate-x-0",
+        mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      )}
+    >
       <div className="border-b border-white/5 p-5">
         <Link href="/admin" className="flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 text-xs font-bold text-white shadow-lg shadow-emerald-900/30">
@@ -51,6 +64,7 @@ export function AdminSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onMobileClose}
               className={cn(
                 "relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-300",
                 isActive ? "text-emerald-300" : "text-zinc-400 hover:text-zinc-200"

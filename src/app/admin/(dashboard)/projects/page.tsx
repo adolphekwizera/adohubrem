@@ -23,7 +23,7 @@ export default async function AdminProjectsPage() {
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
             Projects
@@ -54,10 +54,10 @@ export default async function AdminProjectsPage() {
             return (
               <Card
                 key={project.id}
-                className="flex items-center justify-between gap-4"
+                className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
               >
-                <div>
-                  <div className="flex items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
                     <h3 className="font-semibold text-zinc-900 dark:text-white">
                       {project.title}
                     </h3>
@@ -71,7 +71,7 @@ export default async function AdminProjectsPage() {
                 </div>
                 <Link
                   href={`/admin/projects/${project.id}/edit`}
-                  className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  className="self-start rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 sm:self-center"
                 >
                   <Pencil size={18} />
                 </Link>

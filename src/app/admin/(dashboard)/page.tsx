@@ -71,7 +71,7 @@ export default async function AdminDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">
+        <h1 className="text-2xl font-bold text-white sm:text-3xl">
           Welcome back, {session?.user?.name?.split(" ")[0] || "Admin"}
         </h1>
         <p className="mt-2 text-zinc-400">

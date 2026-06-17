@@ -69,8 +69,8 @@ export default function AdminMessagesPage() {
               key={msg.id}
               className={!msg.read ? "border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-900/10" : ""}
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold text-zinc-900 dark:text-white">
                       {msg.subject}
@@ -89,7 +89,7 @@ export default function AdminMessagesPage() {
                     {msg.message}
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex shrink-0 gap-2 self-start sm:self-start">
                   <button
                     onClick={() => toggleRead(msg.id, msg.read)}
                     className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
